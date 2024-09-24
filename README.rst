@@ -1,4 +1,4 @@
-git-sweep
+git-sweep-latest
 =========
 
 A command-line tool that helps you clean up Git branches that have been merged
