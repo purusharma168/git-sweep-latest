@@ -6,7 +6,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
-version = '0.1.1'
+version = '1.0.1'
 
 install_requires = [
     'GitPython>=0.3.2RC1']
@@ -26,7 +26,7 @@ setup(name='git-sweep',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: POSIX',
-        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Quality Assurance',
         'Topic :: Software Development :: Version Control',
