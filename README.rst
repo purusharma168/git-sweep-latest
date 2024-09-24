@@ -147,19 +147,19 @@ immediately.
 
     Tell everyone to run `git fetch --prune` to sync with this remote.
     (you don't have to, yours is synced)
-    
-    
+
+
 Deleting local branches
 -----------
 
 You can also clean up local branches by using simple hack:
 
-:: 
+::
 
     $ cd myrepo
     $ git remote add local $(pwd)
     $ git-sweep cleanup --origin=local
-    
+
 
 Development
 -----------
@@ -191,12 +191,11 @@ Requirements
 
 * Git >= 1.7
 * Python >= 2.6
+this can support 3.9 version also
 
 License
 -------
 
 Friendly neighborhood MIT license.
 
-.. _GitHub Flow: http://scottchacon.com/2011/08/31/github-flow.html
-.. _git-flow: http://nvie.com/posts/a-successful-git-branching-model/
-.. _Tox: http://pypi.python.org/pypi/tox
+
