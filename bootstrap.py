@@ -20,6 +20,7 @@ use the -c option to specify an alternate configuration file.
 $Id: bootstrap.py 102545 2009-08-06 14:49:47Z chrisw $
 """
 
+
 import os, shutil, sys, tempfile, urllib2
 from optparse import OptionParser
 
