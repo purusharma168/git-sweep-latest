@@ -1,201 +1,146 @@
-git-sweep
-=========
+git-sweep-latest
+================
 
-A command-line tool that helps you clean up Git branches that have been merged
-into master.
+`datopic-git-sweep-latest 0.1.1 <https://pypi.org/project/datopic-git-sweep-latest/0.1.1/#description>`_
 
-One of the best features of Git is cheap branches. There are existing branching
-models like `GitHub Flow`_ and Vincent Driessen's `git-flow`_ that describe
-methods for using this feature.
-
-The problem
------------
-
-Your ``master`` branch is typically where all your code lands. All features
-branches are meant to be short-lived and merged into ``master`` once they are
-completed.
-
-As time marches on, you can build up **a long list of branches that are no
-longer needed**. They've been merged into ``master``, what do we do with them
-now?
-
-The answer
-----------
-
-Using ``git-sweep`` you can **safely remove remote branches that have been
-merged into master**.
-
-To install it run:
-
-::
-
-    pip install git-sweep || easy_install git-sweep
-
-Try it for yourself (safely)
-----------------------------
-
-To see a list of branches that git-sweep detects are merged into your master branch:
-
-You need to have your Git repository as your current working directory.
-
-::
-
-    $ cd myrepo
-
-The ``preview`` command doesn't make any changes to your repo.
-
-::
-
-    $ git-sweep preview
-    Fetching from the remote
-    These branches have been merged into master:
-
-      branch1
-      branch2
-      branch3
-      branch4
-      branch5
-
-    To delete them, run again with `git-sweep cleanup`
-
-If you are happy with the list, you can run the command that deletes these
-branches from the remote, ``cleanup``:
-
-::
-
-    $ git-sweep cleanup
-    Fetching from the remote
-    These branches have been merged into master:
-
-      branch1
-      branch2
-      branch3
-      branch4
-      branch5
-
-    Delete these branches? (y/n) y
-      deleting branch1 (done)
-      deleting branch2 (done)
-      deleting branch3 (done)
-      deleting branch4 (done)
-      deleting branch5 (done)
-
-    All done!
-
-    Tell everyone to run `git fetch --prune` to sync with this remote.
-    (you don't have to, yours is synced)
-
-*Note: this can take a little time, it's talking over the tubes to the remote.*
-
-You can also give it a different name for your remote and master branches.
-
-::
-
-    $ git-sweep preview --master=develop --origin=github
-    ...
-
-Tell it to skip the ``git fetch`` that it does by default.
-
-::
-
-    $ git-sweep preview --nofetch
-    These branches have been merged into master:
-
-      branch1
-
-    To delete them, run again with `git-sweep cleanup --nofetch`
-
-Make it skip certain branches.
-
-::
-
-    $ git-sweep preview --skip=develop
-    Fetching from the remote
-    These branches have been merged into master:
-
-      important-upgrade
-      upgrade-libs
-      derp-removal
-
-    To delete them, run again with `git-sweep cleanup --skip=develop`
-
-Once git-sweep finds the branches, you'll be asked to confirm that you wish to
-delete them.
-
-::
-
-    Delete these branches? (y/n)
-
-You can use the ``--force`` option to bypass this and start deleting
-immediately.
-
-::
-
-    $ git-sweep cleanup --skip=develop --force
-    Fetching from the remote
-    These branches have been merged into master:
-
-      important-upgrade
-      upgrade-libs
-      derp-removal
-
-      deleting important-upgrade (done)
-      deleting upgrade-libs (done)
-      deleting derp-removal (done)
-
-    All done!
-
-    Tell everyone to run `git fetch --prune` to sync with this remote.
-    (you don't have to, yours is synced)
-
-
-Deleting local branches
------------
-
-You can also clean up local branches by using simple hack:
-
-::
-
-    $ cd myrepo
-    $ git remote add local $(pwd)
-    $ git-sweep cleanup --origin=local
-
-
-Development
------------
-
-git-sweep uses `git-flow`_ for development and release cylces. If you want to
-hack on this with us, fork the project and put a pull request into the
-``develop`` branch when you get done.
-
-To run the tests, bootstrap Buildout and run this command:
-
-::
-
-    $ git clone http://github.com/arc90/git-sweep.git
-    $ cd git-sweep
-    $ python2.7 bootstrap.py
-    ...
-    $ ./bin/buildout
-    ...
-    $ ./bin/test
-
-We also use Tox_. It will run the tests for Python 2.6 and 2.7.
-
-::
-
-    $ ./bin/tox
-
-Requirements
+Introduction
 ------------
 
-* Git >= 1.7
-* Python >= 2.6
-this can support 3.9 version also
+`git-sweep` is a tool designed to help clean up stale, merged branches from a Git repository. As development progresses, many feature branches get merged into the main branch (e.g., master, main, dev) and remain in the repository even though they are no longer needed. Over time, this can lead to clutter, making it harder to manage your repository. `git-sweep` automates the cleanup process by identifying and removing branches that have already been merged, helping to keep your repository clean and organized.
 
-License
--------
+Why Use git-sweep?
+------------------
 
-Friendly neighborhood MIT license.
+In collaborative environments, multiple feature branches are regularly created and merged. Without proper cleanup, the number of stale branches grows. Here are some common reasons to use `git-sweep`:
 
+- **Avoid Repository Clutter**: Old merged branches make it hard to find relevant branches and manage active development.
+- **Improve Team Collaboration**: A clean repository helps developers focus on relevant branches.
+- **Better Performance**: Fewer branches lead to faster repository performance, especially with remote operations.
+- **Prevent Mistakes**: Old branches may lead to accidental checkouts. Cleanup reduces the chance of confusion.
 
+Benefits of git-sweep
+---------------------
+
+- **Automates Branch Cleanup**: Automatically identify and delete old branches, saving time and effort.
+- **Customizable Workflow**: You can specify the remote repository and branch (e.g., master, dev, main) to check for merges and skip specific branches if needed.
+- **Safe Deletion Process**: A preview mode allows you to review the branches before deletion.
+- **Supports Remote Cleanup**: Branches are deleted from both local and remote repositories.
+- **Simplifies Maintenance**: Regular cleanups improve the overall health of your repository.
+
+How to Use git-sweep
+--------------------
+
+### 1. Installation
+
+Install `git-sweep` using pip:
+
+.. code:: bash
+
+    pip install datopic-git-sweep-latest==0.1.1
+
+### 2. Navigate to Your Repository
+
+Navigate to the Git repository you wish to clean:
+
+.. code:: bash
+
+    cd /path/to/your/repository
+
+### 3. Preview Merged Branches
+
+To preview branches that are safe to delete, specify the primary branch using the `--master` flag:
+
+.. code:: bash
+
+    git-sweep preview --master dev_puru
+
+This will:
+
+- Fetch the latest info from the remote repository.
+- List all branches merged into `dev_puru` (or whichever branch is specified).
+- Display a preview without making changes.
+
+### 4. Clean Up Merged Branches
+
+Once you're satisfied with the preview, you can delete the merged branches:
+
+.. code:: bash
+
+    git-sweep cleanup --master dev_puru
+
+To force deletion without confirmation, use the `--force` flag:
+
+.. code:: bash
+
+    git-sweep cleanup --master dev_puru --force
+
+### 5. Skipping Specific Branches
+
+To skip specific branches during cleanup, use the `--skip` flag:
+
+.. code:: bash
+
+    git-sweep cleanup --master dev_puru --skip main,master
+
+### 6. Manual Deletion (Optional)
+
+If `git-sweep` fails to delete certain branches, you can manually delete them:
+
+.. code:: bash
+
+    git push origin --delete branch-name
+
+Example Workflow
+----------------
+
+For a repository with the following setup:
+
+- Primary branch: `dev_puru`
+- Merged branches: `feature/add-login`, `feature/add-signup`, `bugfix/typo-fix`
+
+Step 1: Preview merged branches:
+
+.. code:: bash
+
+    git-sweep preview --master dev_puru
+
+Step 2: Clean up merged branches:
+
+.. code:: bash
+
+    git-sweep cleanup --master dev_puru
+
+Step 3: Skip specific branches:
+
+.. code:: bash
+
+    git-sweep cleanup --master dev_puru --skip main
+
+Error Handling
+--------------
+
+### Error: Failed to Delete Branches
+
+If you encounter the following error:
+
+.. code:: bash
+
+    error: failed to push some refs to 'https://github.com/purusharma168/git-sweep-latest.git'
+
+### Step-by-Step Resolution
+
+1. **Check for Branch Protection Rules**:
+
+   Branch protection rules on GitHub can prevent deletion of branches like `main` or `master`. To modify these rules:
+
+   - Go to the repository on GitHub.
+   - Click on the "Settings" tab.
+   - Under "Branches", modify the rules under "Branch Protection Rules".
+
+2. **Ensure Correct Permissions**:
+
+   Ensure that your Personal Access Token (PAT) has the `repo` scope, which includes branch deletion permissions. If needed, generate a new token with the correct scopes:
+
+.. code:: bash
+
+    git remote set-url origin https://<your-new-token>@github.com/username/git-sweep-latest.git
