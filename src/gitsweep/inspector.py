@@ -3,6 +3,7 @@ from git import Git
 from .base import BaseOperation
 
 
+
 class Inspector(BaseOperation):
 
     """
