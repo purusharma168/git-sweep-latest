@@ -21,6 +21,7 @@ $Id: bootstrap.py 102545 2009-08-06 14:49:47Z chrisw $
 """
 
 import os, shutil, sys, tempfile, urllib2
+from imp import reload
 from optparse import OptionParser
 
 tmpeggs = tempfile.mkdtemp()
