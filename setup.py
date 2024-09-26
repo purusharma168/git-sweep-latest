@@ -26,6 +26,7 @@ install_requires = [
 if sys.version_info[0] <= 2 and sys.version_info[1] < 7:
     install_requires.append('argparse>=1.2.1')
 
+
 setup(
     name='datopic-git-sweep-latest',
     version=version,
